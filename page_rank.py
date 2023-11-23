@@ -11,7 +11,7 @@ class PageRank():
 
     Parameters
     ----------
-    numpyArray: numpy array with kind of
+    numpy_array: numpy array with kind of
         [[0. 1. 1. 1. 1. 0.]
         [1. 0. 1. 1. 1. 0.]
         [1. 1. 0. 1. 0. 0.]
@@ -82,25 +82,25 @@ class PageRank():
             @param None
         """
         N = self.matrix.shape[0]
-        pageRank = [1] * N
+        page_rank = [1] * N
         deg = self.get_degree_of_vertices()
 
         for _ in range(self.num_iterations):
-            newPageRank = [0] * N
+            new_page_rank = [0] * N
             diff = [0] * N
-            s = self.get_sum_of_incoming_page_rank_scores(page_rank=pageRank, deg=deg)
+            s = self.get_sum_of_incoming_page_rank_scores(page_rank=page_rank, deg=deg)
 
             for j in range(N):
-                newPageRank[j] = (1 - self.d) / N + self.d * s[j]
-                diff[j] = abs(newPageRank[j] - pageRank[j])
+                new_page_rank[j] = (1 - self.d) / N + self.d * s[j]
+                diff[j] = abs(new_page_rank[j] - page_rank[j])
 
             stopPoint = sum(diff) / int(N)
-            pageRank = newPageRank
+            page_rank = new_page_rank
 
             if stopPoint <= self.threshold:
                 break
 
-        return pageRank
+        return page_rank
 # Test
 # A = [[0, 1, 1, 1, 1, 0],
 #      [1, 0, 1, 1, 1, 0],
