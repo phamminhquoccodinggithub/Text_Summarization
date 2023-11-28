@@ -62,7 +62,8 @@ def get_similarity_matrix(sentences):
                 # Vectorize sentences
                 veci, vecj = convert_sentences_to_vector(sentences[i], sentences[j])
                 # Find similarities between the sentences and make 2D matrix
-                similarity_matrix[i][j] = get_sentence_similarity(veci, vecj)
+                cosine_score = get_sentence_similarity(veci, vecj)
+                similarity_matrix[i][j] = cosine_score
     return similarity_matrix
 
 
@@ -109,3 +110,19 @@ def get_num_of_sent_in_summary(file_name, sum_dir="DUC_SUM"):
     with open(sum_dir + "/" + file_name, encoding="utf-8") as f:
         text = f.readlines()
     return len(text)
+
+
+def get_accuracy(my_output, expected_result):
+    """
+        Get accuracy of text summarization between output and expected result
+
+        @param my_output: list of sentences after summarization
+        @param expected_result: list of expected summary sentences
+    """
+    count = accuracy = 0
+    for sentence in my_output:
+        if sentence in expected_result:
+            count += 1
+    if len(expected_result) != 0:
+        accuracy = count / len(expected_result)
+    return accuracy
