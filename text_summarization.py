@@ -34,6 +34,9 @@ def main():
         )
 
         utils.write_file(contents=text_sum, file_name=file)
+        expected_result = preprocessing.read_file(file_path="DUC_SUM/" + file)
+        sum_sents = preprocessing.read_file(file_path="OUTPUT/" + file)
+        print(utils.get_accuracy(expected_result, sum_sents))
 
 
 if __name__ == "__main__":
