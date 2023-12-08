@@ -3,6 +3,7 @@
 """
 import os
 import numpy as np
+import json
 
 
 def convert_sentences_to_vector(first_sentence, second_sentence):
@@ -97,7 +98,10 @@ def write_file(contents, file_name, sum_dir = "OUTPUT/"):
     if not os.path.exists(sum_dir):
         os.makedirs(sum_dir)
     with open(sum_dir + file_name, "w", encoding="utf-8") as f:
-        f.write(contents)
+        if isinstance(contents, dict):
+            f.write(json.dumps(contents, indent="\t"))
+        else:
+            f.write(contents)
 
 
 def get_num_of_sent_in_summary(file_name, sum_dir="DUC_SUM"):

@@ -12,6 +12,7 @@ def main():
     """
         Main function
     """
+    accuracy = {}
     for file in preprocessing.get_all_files(TRAIN_DIR):
         file_path = TRAIN_DIR + "/" + file
 
@@ -34,9 +35,12 @@ def main():
         )
 
         utils.write_file(contents=text_sum, file_name=file)
+
         expected_result = preprocessing.read_file(file_path="DUC_SUM/" + file)
         sum_sents = preprocessing.read_file(file_path="OUTPUT/" + file)
-        print(utils.get_accuracy(expected_result, sum_sents))
+        accuracy[file] = utils.get_accuracy(expected_result, sum_sents)
+
+    utils.write_file(contents=accuracy, file_name='Accuracy.json')
 
 
 if __name__ == "__main__":
