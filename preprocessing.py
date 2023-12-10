@@ -19,10 +19,7 @@ def get_all_files(dir_path):
 
         @param dir_path: path of folder
     """
-    files = []
-    for file in sorted(os.listdir(dir_path)):
-        files.append(file)
-    return files
+    return [file for file in sorted(os.listdir(dir_path))]
 
 
 def read_file(file_path):
@@ -80,6 +77,8 @@ def stemming_words(contents):
     """
         Remove morphological affixes from words, leaving only the word stem.
         Ex: sized -> size, reference -> refer
+
+        @param contents: list of sentences
     """
     stemmer = PorterStemmer()
     return [[stemmer.stem(word) for word in sentence] for sentence in contents]
@@ -89,6 +88,8 @@ def lemmatizing_words(contents):
     """
         Grouping together the inflected forms of a word
         Ex: rocks -> rock, better -> good
+
+        @param contents: list of sentences
     """
     lemmatizer = WordNetLemmatizer()
     return [[lemmatizer.lemmatize(word) for word in sentence] for sentence in contents]

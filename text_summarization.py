@@ -7,14 +7,23 @@ import utils
 import page_rank
 
 TRAIN_DIR = "DUC_TEXT/train"
+TEST_DIR = "DUC_TEXT/test"
 
 def main():
     """
         Main function
     """
     accuracy = {}
-    for file in preprocessing.get_all_files(TRAIN_DIR):
-        file_path = TRAIN_DIR + "/" + file
+
+    files = preprocessing.get_all_files(TRAIN_DIR)
+    for file in preprocessing.get_all_files(TEST_DIR):
+        files.append(file)
+
+    for file in files:
+        if file not in preprocessing.get_all_files(TEST_DIR):
+            file_path = TRAIN_DIR + "/" + file
+        else:
+            file_path = TEST_DIR + "/" + file
 
         sentences = preprocessing.read_file(file_path)
         clean_data = preprocessing.get_clean_data(file_path)

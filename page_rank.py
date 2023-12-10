@@ -40,7 +40,7 @@ class PageRank():
         """
             @note: Return a numpy array
 
-            @param: None
+            @param: arr_2d: 2D array
         """
         if isinstance(np.ndarray, type(arr_2d)):
             return arr_2d
@@ -64,7 +64,7 @@ class PageRank():
         """
             @note: Return a list sum of the incoming PageRank scores of adjacent vertices
 
-            @param pageRank: List initial pagerank
+            @param page_rank: List initial pagerank
             @param deg: Degree of vertices
         """
         N = self.matrix.shape[0]
@@ -101,6 +101,7 @@ class PageRank():
                 break
 
         return page_rank
+
 # Test
 # A = [[0, 1, 1, 1, 1, 0],
 #      [1, 0, 1, 1, 1, 0],

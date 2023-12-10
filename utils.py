@@ -1,9 +1,9 @@
 """
     Contain some util functions
 """
+import json
 import os
 import numpy as np
-import json
 
 
 def convert_sentences_to_vector(first_sentence, second_sentence):
@@ -129,4 +129,4 @@ def get_accuracy(my_output, expected_result):
             count += 1
     if len(expected_result) != 0:
         accuracy = count / len(expected_result)
-    return accuracy
+    return round(accuracy, 2)
