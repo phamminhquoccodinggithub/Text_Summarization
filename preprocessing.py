@@ -4,7 +4,6 @@
 import re
 import os
 
-from nltk.tokenize import sent_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.stem import PorterStemmer
@@ -19,7 +18,7 @@ def get_all_files(dir_path):
 
         @param dir_path: path of folder
     """
-    return [file for file in sorted(os.listdir(dir_path))]
+    return sorted(os.listdir(dir_path))
 
 
 def read_file(file_path):
@@ -28,11 +27,9 @@ def read_file(file_path):
 
         @param file_path: file path
     """
-    doc = []
     with open(file_path, encoding="utf-8") as f:
-        for line in f:
-            doc.append(sent_tokenize(line))
-    return [sentence for row in doc for sentence in row]
+        contents = f.readlines()
+    return contents
 
 
 def normalization(file_path):
@@ -45,8 +42,8 @@ def normalization(file_path):
     for line in read_file(file_path):
         sentences = []
 
-        if line.endswith('</s>'):
-            line = line.rstrip('</s>')
+        if line.endswith('</s>\n'):
+            line = line.rstrip('</s>\n')
 
         sentences.append(line[line.find(">")+1:])
 
