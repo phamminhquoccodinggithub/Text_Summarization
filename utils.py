@@ -1,9 +1,52 @@
+# pylint:disable = invalid-name
 """
     Contain some util functions
 """
 import json
 import os
 import numpy as np
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+
+def word_to_vec(sentences):
+    """
+        Vertorize sentences based on Word2Vec Glove
+
+        @param sentences: a list sentences
+    """
+    # Extracting word vectors
+    word_embeddings = {}
+    with open('Word_Embedding/glove.6B.100d.txt', encoding='utf-8') as f:
+        for line in f:
+            values = line.split()
+            word = values[0]
+            coefs = np.asarray(values[1:], dtype='float32') # Convert the input to an array.
+            word_embeddings[word] = coefs
+
+    # Create vectors for sentences
+    sentence_vectors = []
+
+    for i in sentences:
+        if len(i) != 0:
+            v = sum([word_embeddings.get(w, np.zeros((100,))) for w in i])/(len(i)+0.001)
+        else:
+            v = np.zeros((100,))
+        sentence_vectors.append(v)
+
+    return sentence_vectors
+
+
+def tf_idf(sentences):
+    """
+        Vertorize sentences based on TF-IDF
+
+        @param sentences: a list sentences
+    """
+    corpus = [" ".join(item) for item in sentences]
+    vectorizer = TfidfVectorizer()
+    X = vectorizer.fit_transform(corpus)
+    return X.toarray()
 
 
 def convert_sentences_to_vector(first_sentence, second_sentence):
@@ -50,21 +93,25 @@ def get_sentence_similarity(vec_st, vec_nd):
     return cosine
 
 
-def get_similarity_matrix(sentences):
+def get_similarity_matrix(sentences, technique=0):
     """
         Return a similarity matrix of sentences
 
         @param sentences: a list input sentences
+        @param technique: BOW, tf-idf, word2vec. Default is BOW - 0, other techniques input 1
     """
     similarity_matrix = np.zeros([len(sentences), len(sentences)]) # Make a zero matrix
     for i,_ in enumerate(sentences):
         for j,_ in enumerate(sentences):
             if i != j:
                 # Vectorize sentences
-                veci, vecj = convert_sentences_to_vector(sentences[i], sentences[j])
-                # Find similarities between the sentences and make 2D matrix
-                cosine_score = get_sentence_similarity(veci, vecj)
+                if not technique:
+                    veci, vecj = convert_sentences_to_vector(sentences[i], sentences[j])
+                    cosine_score = get_sentence_similarity(veci, vecj)
+                else:
+                    cosine_score = get_sentence_similarity(sentences[i], sentences[j])
                 similarity_matrix[i][j] = cosine_score
+
     return similarity_matrix
 
 
@@ -81,10 +128,9 @@ def get_text_summarization(page_rank, sentences, num_sum=18):
     text = ""
     # Generate summary
     for i in range(num_sum):
-        text += "".join(ranked_sentences[i][1]) + "<NewLine>"
-    sentences = text.split("<NewLine>")
+        text += "".join(ranked_sentences[i][1])
 
-    return '\n'.join(sentences)
+    return text
 
 
 def write_file(contents, file_name, sum_dir = "OUTPUT/"):
